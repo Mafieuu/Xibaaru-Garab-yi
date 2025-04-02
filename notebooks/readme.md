@@ -1,7 +1,8 @@
 # Connexion API
 ## Prérequis
 
-* Un compte sur apps.sentinel-hub.com est necessaire. Noter que pour un acces gratuit vous disposez que d'un mois.
+* Un compte sur https://shapps.dataspace.copernicus.eu/dashboard/#/account/settings est necessaire. Noter que pour un acces gratuit vous disposez que d'un mois.
+* Ne pas se servir apps.sentinel-hub.com même si le tutoriel demande de le faire : Elle ne reconnais pas les clefs clients
 * Se referer à la documentation officielle 
 
 ## Configuration
