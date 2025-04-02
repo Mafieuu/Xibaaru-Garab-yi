@@ -1,0 +1,3 @@
+notebooks/.env
+# Ignorer tous les check points Jupyter Notebook
+**/.ipynb_checkpoints 
