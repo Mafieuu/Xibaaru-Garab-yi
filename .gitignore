@@ -1,3 +1,5 @@
 notebooks/.env
 # Ignorer tous les check points Jupyter Notebook
 **/.ipynb_checkpoints 
+anaconda_projects/
+.virtual_documents/
