@@ -3,3 +3,4 @@ notebooks/.env
 **/.ipynb_checkpoints 
 anaconda_projects/
 .virtual_documents/
+.virtual_documents/
