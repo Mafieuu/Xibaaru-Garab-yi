@@ -7,3 +7,4 @@ anaconda_projects/
 notebooks/credentials.json
 notebooks/token.pickle
 dashboard/data/*.tif
+venv_env/
