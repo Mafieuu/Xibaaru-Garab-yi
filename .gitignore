@@ -4,3 +4,6 @@ notebooks/.env
 anaconda_projects/
 .virtual_documents/
 .virtual_documents/
+notebooks/credentials.json
+notebooks/token.pickle
+dashboard/data/*.tif
