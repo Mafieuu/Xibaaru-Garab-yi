@@ -80,7 +80,7 @@ def classify_ndvi(ndvi_matrix):
         category_mask = (ndvi_matrix >= lower_bound) & (ndvi_matrix <= upper_bound) # Un tableau booléen
         ndvi_class_map[category_mask] = category_counter # remplace les 0 par le numero de la classe NDVI
         category_counter += 1  
-    return ndvi_class_map 
+    return ndvi_class_map # return array chaque pixel remplacer par le numero de sa classe
 # -----------------------------------------------------------------------------
 def calcul_class_stats(ndvi_class_map):
     """

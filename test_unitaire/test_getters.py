@@ -5,7 +5,7 @@
 # le dossier DATA_DIR sera simuler par le package tempfile
 # car les .tif ne sont pas partagé dans le repertoire Github
 # ref : https://docs.pytest.org/en/stable/how-to/monkeypatch.html
-#
+# execution : pytest --rich test_getters.py
 # ====================================================================================
 
 import os
