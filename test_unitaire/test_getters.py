@@ -18,23 +18,29 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "d
 from utils.data_loader import get_forest_names, get_available_years, get_file_path
 from utils.constantes import DATA_DIR
 print(DATA_DIR)
+# ====================================================================================
 
 def test_get_forest_names(monkeypatch):
+    print("Début du test : test_get_forest_names")
 
     # Simuler le dossier "data" temporairement
 
     with tempfile.TemporaryDirectory() as tmpdir: 
+       
 
         # remplace temporairement la valeur de DATA_DIR par tmpdir
 
         monkeypatch.setattr("utils.constantes.DATA_DIR", tmpdir)
-        open(os.path.join(tmpdir, "Foret_Classee_de_Mbao_01-01-01-02-2020.tif"), "a").close()
-        open(os.path.join(tmpdir, "Foret_Classee_de_Richard-Toll_01-01-01-02-2021.tif"), "a").close()
-
+        print(f"Dossier temporaire créé : {tmpdir}")
+        file1 = os.path.join(tmpdir, "Foret_Classee_de_Mbao_01-01-01-02-2020.tif")
+        file2 = os.path.join(tmpdir, "Foret_Classee_de_Richard-Toll_01-01-01-02-2021.tif")
+        open(file1, "a").close()
+        open(file2, "a").close()
+        print(f"Fichiers créés :\n- {file1}\n- {file2}")
         forests = get_forest_names()
         assert "Mbao" in forests
         assert "Richard-Toll" in forests
-
+# ====================================================================================
 def test_get_available_years(monkeypatch):
     with tempfile.TemporaryDirectory() as tmpdir:
         monkeypatch.setattr("utils.constantes.DATA_DIR", tmpdir)
@@ -44,7 +50,7 @@ def test_get_available_years(monkeypatch):
         years = get_available_years()
         assert "2019" in years
         assert "2020" in years
-
+# ====================================================================================
 def test_get_file_path(monkeypatch):
     with tempfile.TemporaryDirectory() as tmpdir:
         monkeypatch.setattr("utils.constantes.DATA_DIR", tmpdir)
