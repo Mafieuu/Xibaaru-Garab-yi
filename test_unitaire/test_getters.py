@@ -44,6 +44,7 @@ def test_get_forest_names(monkeypatch):
 def test_get_available_years(monkeypatch):
     with tempfile.TemporaryDirectory() as tmpdir:
         monkeypatch.setattr("utils.constantes.DATA_DIR", tmpdir)
+        # Pendant ce test, fais comme si la variable DATA_DIR dans utils.constantes valait tmpdir
         open(os.path.join(tmpdir, "Foret_Classee_de_X_01-01-01-02-2019.tif"), "a").close()
         open(os.path.join(tmpdir, "Foret_Classee_de_Y_01-01-01-02-2020.tif"), "a").close()
 

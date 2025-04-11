@@ -11,7 +11,10 @@ import sys
 # si Python ne parviens pas a acceder au dossier dashboard:l'ajouter au path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "dashboard")))
 # *********************
-from utils.constantes import *
+import utils.constantes as constantes  # Import direct  
+# Dans les tests unitaire nous utulisons monkeypatch.setattr("utils.constantes.DATA_DIR", tmpdir)
+# pour  modifier DATA_DIR dans constantes.py, mais si DATA_DIR est importé directement, il ne se mettra pas à jour.
+
 import rasterio
 import numpy as np
 
@@ -20,7 +23,7 @@ def get_forest_names():
     """
      obtenir les noms des forêts à partir des noms de fichiers
     """
-    files = glob.glob(os.path.join(DATA_DIR, "Foret_Classee_de_*.tif"))
+    files = glob.glob(os.path.join(constantes.DATA_DIR, "Foret_Classee_de_*.tif"))
     forest_names = set()
     for file in files:
         basename = os.path.basename(file)
@@ -37,7 +40,7 @@ def get_available_years():
     '''
     obtenir les années disponibles
     '''
-    files = glob.glob(os.path.join(DATA_DIR, "*.tif"))
+    files = glob.glob(os.path.join(constantes.DATA_DIR, "*.tif"))
     years = set()
     for file in files:
         basename = os.path.basename(file)
@@ -54,7 +57,7 @@ def get_file_path(forest_name, year):
     """
     trouver le fichier correspondant à une forêt et une année
     """
-    pattern = os.path.join(DATA_DIR, f"Foret_Classee_de_{forest_name}_01-01-01-02-{year}.tif")
+    pattern = os.path.join(constantes.DATA_DIR, f"Foret_Classee_de_{forest_name}_01-01-01-02-{year}.tif")
     matching_files = glob.glob(pattern)
     if matching_files:
         return matching_files[0] # return le path du premier fichier trouvé
@@ -73,7 +76,7 @@ def classify_ndvi(ndvi_matrix):
     ndvi_class_map = np.zeros_like(ndvi_matrix)
     category_counter = 1  # indice 1 pour la premiére classe 
 
-    for category_label, (lower_bound, upper_bound) in NDVI_CLASSES.items():
+    for category_label, (lower_bound, upper_bound) in constantes.NDVI_CLASSES.items():
         category_mask = (ndvi_matrix >= lower_bound) & (ndvi_matrix <= upper_bound) # Un tableau booléen
         ndvi_class_map[category_mask] = category_counter # remplace les 0 par le numero de la classe NDVI
         category_counter += 1  
@@ -99,11 +102,11 @@ def calcul_class_stats(ndvi_class_map):
     total_pixels = np.sum(pixel_counts) # is integer
     class_stats = {}
     
-    for class_index, class_label in NDVI_CLASSES.items():
+    for class_index, class_label in constantes.NDVI_CLASSES.items():
         # nombre de pixels pour la classe actuelle
         pixel_count = dict_class_pixel_count.get(class_index, 0)
 
-        total_surface_m2 = pixel_count * pixel_surface_m2
+        total_surface_m2 = pixel_count * constantes.pixel_surface_m2
         total_surface_ha = total_surface_m2 / 10000  # conversion en hectare
 
         pourcentage_couverture = (pixel_count / total_pixels * 100) if total_pixels > 0 else 0
