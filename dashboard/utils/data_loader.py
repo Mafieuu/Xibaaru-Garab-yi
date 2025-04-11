@@ -4,13 +4,18 @@
 # et qu'on télécharge toujours des images composites entre le 01 janvier et le 01 fevrier
 # -----------------------------------------------------------------------------
 
-import glob
+import glob # pour rechercher dans data_dir un paterne dans fil name
 import os
-from constantes import *
+import sys
+# *********************
+# si Python ne parviens pas a acceder au dossier dashboard:l'ajouter au path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "dashboard")))
+# *********************
+from utils.constantes import *
 import rasterio
 import numpy as np
 
-
+# -----------------------------------------------------------------------------
 def get_forest_names():
     """
      obtenir les noms des forêts à partir des noms de fichiers
@@ -27,6 +32,7 @@ def get_forest_names():
         except IndexError:
             continue
     return sorted(list(forest_names))
+# -----------------------------------------------------------------------------
 def get_available_years():
     '''
     obtenir les années disponibles
@@ -43,7 +49,7 @@ def get_available_years():
             continue
     return sorted(list(years))
 
-
+# -----------------------------------------------------------------------------
 def get_file_path(forest_name, year):
     """
     trouver le fichier correspondant à une forêt et une année
@@ -51,9 +57,9 @@ def get_file_path(forest_name, year):
     pattern = os.path.join(DATA_DIR, f"Foret_Classee_de_{forest_name}_01-01-01-02-{year}.tif")
     matching_files = glob.glob(pattern)
     if matching_files:
-        return matching_files[0]
+        return matching_files[0] # return le path du premier fichier trouvé
     return None
-
+# -----------------------------------------------------------------------------
 def calcul_ndvi(image_path):
     with rasterio.open(image_path) as src:
         red_band = src.read(3) 
@@ -61,7 +67,7 @@ def calcul_ndvi(image_path):
         ndvi = (nir_band.astype(float) - red_band.astype(float)) / (nir_band.astype(float) + red_band.astype(float))
         
         return ndvi
-
+# -----------------------------------------------------------------------------
 def classify_ndvi(ndvi_matrix):
     # init d'un zero_array de meme dimension que ndvi_array
     ndvi_class_map = np.zeros_like(ndvi_matrix)
@@ -72,7 +78,7 @@ def classify_ndvi(ndvi_matrix):
         ndvi_class_map[category_mask] = category_counter # remplace les 0 par le numero de la classe NDVI
         category_counter += 1  
     return ndvi_class_map 
-
+# -----------------------------------------------------------------------------
 def calcul_class_stats(ndvi_class_map):
     """
     Calcule les statistiques des classes NDVI.
@@ -91,7 +97,7 @@ def calcul_class_stats(ndvi_class_map):
     dict_class_pixel_count = dict(zip(unique_classes, pixel_counts))
     
     total_pixels = np.sum(pixel_counts) # is integer
-    stats = {}
+    class_stats = {}
     
     for class_index, class_label in NDVI_CLASSES.items():
         # nombre de pixels pour la classe actuelle
@@ -109,3 +115,4 @@ def calcul_class_stats(ndvi_class_map):
         }
 
     return class_stats
+# -----------------------------------------------------------------------------
