@@ -1,4 +1,4 @@
-from dash import Output, Input, State
+from dash import Output, Input
 import plotly.graph_objs as go
 from dash import html
 
