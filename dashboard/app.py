@@ -9,7 +9,7 @@ import plotly.graph_objs as go
 import plotly.express as px
 from components.bar_nav import create_origin_selector
 from components.siderbar import create_sidebar
-from components.left_section import create_emissions_sunburst
+from components.left_section import create_emissions_display, create_emissions_sunburst, create_left_img
 from components.right_section import create_water_sunburst
 
 path = 'https://raw.githubusercontent.com/InesRoque3/GroupV_project2/main/data/'
@@ -34,13 +34,6 @@ data_dict={
         'top8_animal': top8_animal
         }
 
-radio_ani_veg = dbc.RadioItems(
-        id='ani_veg', 
-        className='radio',
-        options=[dict(label='Animal', value=0), dict(label='Vegetal', value=1), dict(label='Total', value=2)],
-        value=2, 
-        inline=True
-    )
 
 dict_ = {'Apples':'Apples', 'Bananas':'Bananas', 'Barley':'Barley', 'Beet Sugar':'Sugar beet', 'Berries & Grapes':'Berries & Grapes', 'Brassicas':'Brassicas', 
         'Cane Sugar':'Sugar cane', 'Cassava':'Cassava', 'Citrus Fruit':'Citrus', 'Coffee':'Coffee beans', 'Groundnuts':'Groundnuts','Maize':'Maize', 'Nuts':'Nuts', 
@@ -118,10 +111,7 @@ app.layout = html.Div([
                             html.P(id='comment')
                         ], className='box_comment'),
                     ], className='box', style={'padding-bottom':'15px'}),
-
-                    html.Div([
-                        html.Img(src=app.get_asset_url('Food.png'), style={'width': '100%', 'position':'relative', 'opacity':'80%'}),
-                    ]),
+                    create_left_img(app),
 
                 ], style={'width': '40%'}),
 
@@ -134,48 +124,7 @@ app.layout = html.Div([
                     ], className='box'),
 
                     html.Div([
-                        html.Div([
-                            html.Label('Emissions measured as kg of CO2 per kg of product', style={'font-size': 'medium'}),
-                            html.Br(),
-                            html.Br(),
-                            html.Div([
-                                html.Div([
-                                    html.H4('Land use', style={'font-weight':'normal'}),
-                                    html.H3(id='land_use')
-                                ],className='box_emissions'),
-
-                                html.Div([
-                                    html.H4('Animal Feed', style={'font-weight':'normal'}),
-                                    html.H3(id='animal_feed')
-                                ],className='box_emissions'),
-                            
-                                html.Div([
-                                    html.H4('Farm', style={'font-weight':'normal'}),
-                                    html.H3(id='farm')
-                                ],className='box_emissions'),
-
-                                html.Div([
-                                    html.H4('Processing', style={'font-weight':'normal'}),
-                                    html.H3(id='processing')
-                                ],className='box_emissions'),
-                            
-                                html.Div([
-                                    html.H4('Transport', style={'font-weight':'normal'}),
-                                    html.H3(id='transport')
-                                ],className='box_emissions'),
-
-                                html.Div([
-                                    html.H4('Packaging', style={'font-weight':'normal'}),
-                                    html.H3(id='packging')
-                                ],className='box_emissions'),
-                            
-                                html.Div([
-                                    html.H4('Retail', style={'font-weight':'normal'}),
-                                    html.H3(id='retail')
-                                ],className='box_emissions'),
-                            ], style={'display': 'flex'}),
-
-                        ], className='box', style={'heigth':'10%'}),
+                        create_emissions_display(),
 
                         html.Div([ 
                             html.Div([
