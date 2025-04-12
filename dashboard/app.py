@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objs as go
 from components.bar_nav import create_origin_selector
+from components.display_footer import create_footer
 from components.siderbar import create_sidebar
 from components.left_section import create_emissions_sunburst, create_left_img
 from components.right_section import create_drop_map, create_map_controls, create_water_sunburst,create_emissions_display
@@ -98,15 +99,7 @@ app.layout = html.Div([
                 create_emissions_sunburst(data_dict['global_emissions']), 
                 create_water_sunburst(data_dict["water"]), 
             ], className='row'),
-
-            html.Div([
-                html.Div([
-                    html.P(['GroupV', html.Br(),'Ana Carrelha (20200631), Inês Melo (20200624), Inês Roque (20200644), Ricardo Nunes(20200611)'], style={'font-size':'12px'}),
-                ], style={'width':'60%'}), 
-                html.Div([
-                    html.P(['Sources ', html.Br(), html.A('Our World in Data', href='https://ourworldindata.org/', target='_blank'), ', ', html.A('Food and Agriculture Organization of the United Nations', href='http://www.fao.org/faostat/en/#data', target='_blank')], style={'font-size':'12px'})
-                ], style={'width':'37%'}),
-            ], className = 'footer', style={'display':'flex'}),
+            create_footer(),
         ], className='main'),
     ]),
 ])
