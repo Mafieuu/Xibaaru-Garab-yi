@@ -8,6 +8,8 @@ import pandas as pd
 import plotly.graph_objs as go
 import plotly.express as px
 from components.siderbar import create_sidebar
+from components.left_section import create_emissions_sunburst
+from components.right_section import create_water_sunburst
 
 path = 'https://raw.githubusercontent.com/InesRoque3/GroupV_project2/main/data/'
 
@@ -20,7 +22,16 @@ top10 = emissions.sort_values("Total_emissions")[-10:]
 top10_vegetal = emissions[emissions.Origin=='Vegetal'].sort_values("Total_emissions")[-10:]
 top8_animal = emissions[emissions.Origin=='Animal'].sort_values("Total_emissions")
 
-
+# Un dictionnaire contenant tous les data traité :
+data_dict={ 
+        'emissions': emissions,
+        'productions': productions,
+        'water': water,
+        'global_emissions': global_emissions,
+        'top10': top10,
+        'top10_vegetal': top10_vegetal,
+        'top8_animal': top8_animal
+        }
 
 radio_ani_veg = dbc.RadioItems(
         id='ani_veg', 
@@ -74,20 +85,7 @@ slider_map = daq.Slider(
         color='#4B9072'
     )
 
-fig_water = px.sunburst(water, path=['Origin', 'Category', 'Product'], values='Water Used', color='Category', 
-                        color_discrete_sequence = px.colors.sequential.haline_r).update_traces(hovertemplate = '%{label}<br>' + 'Water Used: %{value} L')
 
-fig_water = fig_water.update_layout({'margin' : dict(t=0, l=0, r=0, b=10),
-                        'paper_bgcolor': '#F9F9F8',
-                        'font_color':'#363535'
-                    })
-
-fig_gemissions = px.sunburst(global_emissions, path = ['Emissions', 'Group','Subgroup'], values = 'Percentage of food emissions', 
-                    color = 'Group', color_discrete_sequence = px.colors.sequential.Peach_r).update_traces(hovertemplate = '%{label}<br>' + 'Global Emissions: %{value}%', textinfo = "label + percent entry") 
-
-fig_gemissions = fig_gemissions.update_layout({'margin' : dict(t=0, l=0, r=0, b=10),
-                        'paper_bgcolor': '#F9F9F8',
-                        'font_color':'#363535'})
 
 
 #------------------------------------------------------ APP ------------------------------------------------------ 
@@ -208,22 +206,8 @@ app.layout = html.Div([
             ], className='row'),
 
             html.Div([
-                html.Div([
-                    html.Label("3. Global greenhouse gas emissions from food production, in percentage", style={'font-size': 'medium'}),
-                    html.Br(),
-                    html.Label('Click on it to know more!', style={'font-size':'9px'}),
-                    html.Br(), 
-                    html.Br(), 
-                    dcc.Graph(figure=fig_gemissions)
-                ], className='box', style={'width': '40%'}), 
-                html.Div([
-                    html.Label("4. Freshwater withdrawals per kg of product, in Liters", style={'font-size': 'medium'}),
-                    html.Br(),
-                    html.Label('Click on it to know more!', style={'font-size':'9px'}),
-                    html.Br(), 
-                    html.Br(), 
-                    dcc.Graph(figure=fig_water)
-                ], className='box', style={'width': '63%'}), 
+                create_emissions_sunburst(data_dict['global_emissions']), 
+                create_water_sunburst(data_dict["water"]), 
             ], className='row'),
 
             html.Div([
