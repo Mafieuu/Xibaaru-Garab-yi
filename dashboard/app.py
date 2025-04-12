@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objs as go
 import plotly.express as px
+from components.bar_nav import create_origin_selector
 from components.siderbar import create_sidebar
 from components.left_section import create_emissions_sunburst
 from components.right_section import create_water_sunburst
@@ -99,12 +100,13 @@ app.layout = html.Div([
 
     html.Div([
         html.Div([
-            html.Div([
-                html.Label("Choose the Product's Origin:"), 
-                html.Br(),
-                html.Br(),
-                radio_ani_veg
-            ], className='box', style={'margin': '10px', 'padding-top':'15px', 'padding-bottom':'15px'}),
+            # La bar nav
+                html.Div([
+                    html.Label("Choose the Product's Origin:"), 
+                    html.Br(),
+                    html.Br(),
+                    create_origin_selector()
+                ], className='box', style={'margin': '10px', 'padding-top':'15px', 'padding-bottom':'15px'}),
 
             html.Div([
                 html.Div([
