@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objs as go
 import plotly.express as px
+from components.siderbar import create_sidebar
 
 path = 'https://raw.githubusercontent.com/InesRoque3/GroupV_project2/main/data/'
 
@@ -96,12 +97,7 @@ app = Dash(__name__)
 
 app.layout = html.Div([
 
-    html.Div([
-        html.H1(children='FOOD FOOTPRINT'),
-        html.Label('We are interested in investigating the food products that have the biggest impact on environment. Here you can understand which are the products whose productions emit more greenhouse gases and associate this with each supply chain step, their worldwide productions, and the water use.', 
-                    style={'color':'rgb(33 36 35)'}), 
-        html.Img(src=app.get_asset_url('supply_chain.png'), style={'position': 'relative', 'width': '180%', 'left': '-83px', 'top': '-20px'}),
-    ], className='side_bar'),
+    create_sidebar(),
 
     html.Div([
         html.Div([
