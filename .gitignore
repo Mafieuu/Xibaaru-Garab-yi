@@ -10,3 +10,4 @@ dashboard/data/*.tif
 venv_env/
 **/__pycache__/
 **/.vscode/
+*csv
