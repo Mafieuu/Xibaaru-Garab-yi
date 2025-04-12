@@ -1,16 +1,12 @@
-import dash
 from dash import html,dcc,Dash
 from dash.dependencies import Input, Output, State
-import dash_daq as daq
-import dash_bootstrap_components as dbc
 import numpy as np
 import pandas as pd
 import plotly.graph_objs as go
-import plotly.express as px
 from components.bar_nav import create_origin_selector
 from components.siderbar import create_sidebar
-from components.left_section import create_emissions_display, create_emissions_sunburst, create_left_img
-from components.right_section import create_water_sunburst
+from components.left_section import create_emissions_sunburst, create_left_img
+from components.right_section import create_drop_map, create_map_controls, create_water_sunburst,create_emissions_display
 
 path = 'https://raw.githubusercontent.com/InesRoque3/GroupV_project2/main/data/'
 
@@ -49,38 +45,6 @@ options_total = [dict(label=key, value=dict_[key]) for key in top10['Food produc
 bar_colors = ['#ebb36a','#6dbf9c']
 bar_options = [top8_animal, top10_vegetal, top10]
 
-drop_map = dcc.Dropdown(
-        id = 'drop_map',
-        clearable=False,
-        searchable=False, 
-        style= {'margin': '4px', 'box-shadow': '0px 0px #ebb36a', 'border-color': '#ebb36a'}        
-    )
-
-drop_continent = dcc.Dropdown(
-        id = 'drop_continent',
-        clearable=False, 
-        searchable=False, 
-        options=[{'label': 'World', 'value': 'world'},
-                {'label': 'Europe', 'value': 'europe'},
-                {'label': 'Asia', 'value': 'asia'},
-                {'label': 'Africa', 'value': 'africa'},
-                {'label': 'North america', 'value': 'north america'},
-                {'label': 'South america', 'value': 'south america'}],
-        value='world', 
-        style= {'margin': '4px', 'box-shadow': '0px 0px #ebb36a', 'border-color': '#ebb36a'}
-    )
-
-slider_map = daq.Slider(
-        id = 'slider_map',
-        handleLabel={"showCurrentValue": True,"label": "Year"},
-        marks = {str(i):str(i) for i in [1990,1995,2000,2005,2010,2015]},
-        min = 1990,
-        size=450, 
-        color='#4B9072'
-    )
-
-
-
 
 #------------------------------------------------------ APP ------------------------------------------------------ 
 
@@ -93,18 +57,18 @@ app.layout = html.Div([
 
     html.Div([
         html.Div([
-            # La bar nav
+# --------------------------------------------------------- La bar nav
                 html.Div([
                     html.Label("Choose the Product's Origin:"), 
                     html.Br(),
                     html.Br(),
                     create_origin_selector()
                 ], className='box', style={'margin': '10px', 'padding-top':'15px', 'padding-bottom':'15px'}),
-
+# ---------------------------------------------------------  Le left_img  puis [le drop_map et [emission_display et le map_controler]]
             html.Div([
                 html.Div([
-
-                    html.Div([   
+                    
+                    html.Div([    
                         html.Label(id='title_bar'),           
                         dcc.Graph(id='bar_fig'), 
                         html.Div([              
@@ -120,42 +84,16 @@ app.layout = html.Div([
 
                     html.Div([
                     html.Label(id='choose_product', style= {'margin': '10px'}),
-                    drop_map,
+                    create_drop_map(),
                     ], className='box'),
 
                     html.Div([
                         create_emissions_display(),
-
-                        html.Div([ 
-                            html.Div([
-                                
-                                html.Div([
-                                    html.Br(),
-                                    html.Label(id='title_map', style={'font-size':'medium'}), 
-                                    html.Br(),
-                                    html.Label('These quantities refer to the raw material used to produce the product selected above', style={'font-size':'9px'}),
-                                ], style={'width': '70%'}),
-                                html.Div([
-
-                                ], style={'width': '5%'}),
-                                html.Div([
-                                    drop_continent, 
-                                    html.Br(),
-                                    html.Br(), 
-                                ], style={'width': '25%'}),
-                            ], className='row'),
-                            
-                            dcc.Graph(id='map', style={'position':'relative', 'top':'-50px'}), 
-
-                            html.Div([
-                                slider_map
-                            ], style={'margin-left': '15%', 'position':'relative', 'top':'-38px'}),
-                            
-                        ], className='box', style={'padding-bottom': '0px'}), 
+                        create_map_controls(), 
                     ]),
                 ], style={'width': '60%'}),           
             ], className='row'),
-
+# ---------------------------------------------------------  Les deux sunburst
             html.Div([
                 create_emissions_sunburst(data_dict['global_emissions']), 
                 create_water_sunburst(data_dict["water"]), 
