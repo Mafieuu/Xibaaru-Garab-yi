@@ -2,7 +2,7 @@ import dash
 from dash import Output, Input, State, html, dcc, no_update
 import plotly.graph_objects as go
 import plotly.express as px
-import data_loader as dl
+import aws_data_loader as dl
 import utils.constantes as constantes
 import numpy as np
 import pandas as pd
@@ -100,8 +100,15 @@ def register_main_callback(app):
         if triggered_id == 'forest-selector': year2_outputs = (year2_selector_style_calc, current_year2_opts, current_year2_value)
         if not forest or not selected_year1 or (is_comparison and not selected_year2):
             
-            placeholder_raster_fig = create_empty_figure("Sélection manquante")
-            placeholder_combined = html.Div([html.H6("Distribution & Stats", style={'text-align':'center'}), create_empty_figure("Sélection manquante")])
+            placeholder_raster_fig = create_empty_figure("Sélection manquante") # Reste go.Figure car va dans un 'figure' prop
+            placeholder_combined = html.Div([
+                html.H6("Distribution & Stats", style={'text-align': 'center'}),
+                # Envelopper la figure dans dcc.Graph
+                dcc.Graph(
+                    figure=create_empty_figure("Sélection manquante"),
+                    config={'displayModeBar': False} # Optionnel: Cacher la barre d'outils Plotly pour les figures vides
+                )
+            ])
             return (secondary_style, "Évolution", create_empty_figure(), timeseries_filter_style, # 4
                     "Erreur Sélection", placeholder_raster_fig,                               # 2 (Titre Raster, Fig Raster)
                     placeholder_combined,                                                  # 1
@@ -192,8 +199,14 @@ def register_main_callback(app):
             elif view_type == 'rgb': # Si vue RGB, pas de stats/graph NDVI
                  combined_stats_chart_content = html.P("Statistiques NDVI non disponibles en vue RGB.", className="text-center fst-italic")
             else: # Si erreur chargement ou stats vides
-                 combined_stats_chart_content = html.Div([html.H6("Distribution & Stats", style={'text-align':'center'}), create_empty_figure(f"Stats manquantes pour {selected_year1}")])
-
+                combined_stats_chart_content = html.Div([
+                    html.H6("Distribution & Stats", style={'text-align':'center'}),
+                    # Envelopper la figure dans dcc.Graph
+                    dcc.Graph(
+                        figure=create_empty_figure(f"Stats manquantes pour {selected_year1}"),
+                        config={'displayModeBar': False} # Optionnel
+                    )
+                ])
             # Zone Tertiaire: Légende et Tendance  (utilise all_stats_df)
           
             tertiary_title = "Légende & Tendances Générales"

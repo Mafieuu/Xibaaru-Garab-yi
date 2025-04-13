@@ -14,3 +14,4 @@ venv_env/
 *.tif
 *.geojson
 dashboard/data/Data_hackathon_stat-20250412T210230Z-001/
+*.env

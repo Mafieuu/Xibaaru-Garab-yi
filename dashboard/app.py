@@ -4,7 +4,7 @@ import sys
 import os
 sys.path.append(os.path.dirname(__file__))
 
-import data_loader 
+import aws_data_loader 
 
 from components.siderbar import create_sidebar
 from components.selectors import (create_analysis_selector, create_forest_selector,
@@ -20,7 +20,7 @@ from components.footer import create_footer
 from callbacks.main_callback import register_main_callback
 
 try:
-    initial_forests, initial_years = data_loader.get_initial_data()
+    initial_forests, initial_years = aws_data_loader.get_initial_data()
     if not initial_forests: print(" Aucune forêt trouvée.")
     if not initial_years: print(" Aucune année trouvée.")
 except Exception as e:
