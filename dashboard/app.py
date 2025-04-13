@@ -1,85 +1,54 @@
-from dash import html,dcc,Dash
-from callbacks.bar_callback import bar_callbacks
-from callbacks.carte_callback import map_callback
-from callbacks.slider_year_callback import slide_year_callback
-from components.bar_nav import create_origin_selector
-from components.display_footer import create_footer
+# app.py
+from dash import Dash, html, dcc
+import dash_bootstrap_components as dbc # Nécessaire si on utilise des composants bootstrap (ex: Table)
+from components.map_display import create_map_display
+from components.selectors import create_selectors
 from components.siderbar import create_sidebar
-from components.left_section import create_emissions_sunburst, create_left_img
-from components.right_section import create_drop_map, create_map_controls, create_water_sunburst,create_emissions_display
-from utils.csv_data_loader import create_dropdown_options, load_data
+import data_loader as dl
 
-data_dict = load_data()
-dropdown_options = create_dropdown_options(data_dict)
+from components.distribution_chart import create_distribution_chart
+from callbacks.main_callback import register_main_callback
 
-#------------------------------------------------------ APP ------------------------------------------------------ 
 
-app = Dash(__name__)
+try:
+    initial_forests, initial_years = dl.get_initial_data()
+    if not initial_forests:
+         print("ERREUR critique: Aucune forêt trouvée au démarrage. Vérifiez DATA_DIR et les fichiers.")
+    if not initial_years:
+         print("AVERTISSEMENT: Aucune année trouvée au démarrage.")
+
+except Exception as e:
+     print(f"ERREUR critique lors du chargement des données initiales: {e}")
+     initial_forests, initial_years = [], []
+
+
+app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+app.title = "Dashboard Suivi Déforestation" # Titre de l'onglet navigateur
 
 
 app.layout = html.Div([
+    create_sidebar(), 
 
-    create_sidebar(),
+    html.Div([ 
+        # Sélecteurs en haut
+        create_selectors(initial_forests, initial_years),
 
-    html.Div([
-        html.Div([
-# --------------------------------------------------------- La bar nav
-                html.Div([
-                    html.Label("Choose the Product's Origin:"), 
-                    html.Br(),
-                    html.Br(),
-                    create_origin_selector()
-                ], className='box', style={'margin': '10px', 'padding-top':'15px', 'padding-bottom':'15px'}),
-# ---------------------------------------------------------  Le left_img  puis [le drop_map et [emission_display et le map_controler]]
-            html.Div([
-                html.Div([
-                    
-                    html.Div([    
-                        html.Label(id='title_bar'),           
-                        dcc.Graph(id='bar_fig'), 
-                        html.Div([              
-                            html.P(id='comment')
-                        ], className='box_comment'),
-                    ], className='box', style={'padding-bottom':'15px'}),
-                    create_left_img(app),
+        # Ligne avec Carte NDVI à gauche et Stats à droite
+        create_map_display(),
 
-                ], style={'width': '40%'}),
+        # Graphique de distribution en dessous
+        create_distribution_chart(),
 
+        # Pied de page 
+        html.Footer([
+            html.P("Projet de Suivi de Déforestation - Inspiré du Hackathon ENSAE"),
 
-                html.Div([
+        ], style={'text-align': 'center', 'margin-top': '20px', 'color': 'grey'})
 
-                    html.Div([
-                    html.Label(id='choose_product', style= {'margin': '10px'}),
-                    create_drop_map(),
-                    ], className='box'),
-
-                    html.Div([
-                        create_emissions_display(),
-                        create_map_controls(), 
-                    ]),
-                ], style={'width': '60%'}),           
-            ], className='row'),
-# ---------------------------------------------------------  Les deux sunburst
-            html.Div([
-                create_emissions_sunburst(data_dict['global_emissions']), 
-                create_water_sunburst(data_dict["water"]), 
-            ], className='row'),
-# ---------------------------------------------------------  Le pied de page           
-            create_footer(),
-        ], className='main'),
-    ]),
+    ], className='main') 
 ])
 
-
-#------------------------------------------------------ Callbacks ------------------------------------------------------
-#---------------------------------------------- Callback de 1. et 2.
-bar_callbacks(app, data_dict, dropdown_options)
-#---------------------------------------------- Callback ajustement du slider year de la carte
-slide_year_callback(app,data_dict)
-# --------------------------------------------
-
-#---------------------------------------------- Callback de Choroplet Plot (la carte ) 
-map_callback(app, data_dict)
+register_main_callback(app)
 
 if __name__ == '__main__':
     app.run(debug=True)

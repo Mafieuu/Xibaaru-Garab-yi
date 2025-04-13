@@ -1,23 +1,17 @@
+# components/sidebar.py
 from dash import html
 
 def create_sidebar():
-    """Create the sidebar component"""
+    """Crée le composant de la barre latérale."""
     return html.Div([
-        html.H1(children='HACKATON ENSAE'),
+        html.H2("Suivi Déforestation"), 
         html.Label(
-            'We are interested in investigating the food products that have the biggest '
-            'impact on environment. Here you can understand which are the products whose '
-            'productions emit more greenhouse gases and associate this with each supply '
-            'chain step, their worldwide productions, and the water use.',
-            style={'color':'rgb(33 36 35)'}
-        ), 
-        html.Img(
-            src='assets/supply_chain.png', 
-            style={
-                'position': 'relative', 
-                'width': '180%', 
-                'left': '-83px', 
-                'top': '-20px'
-            }
+            "Tableau de bord pour visualiser l'évolution de la couverture végétale "
+            "dans différentes forêts classées.",
+            style={'color': 'rgb(33 36 35)'}
         ),
-    ], className='side_bar')
+        html.Hr(),
+        html.P("Sélectionnez une forêt et une année pour afficher la carte NDVI classifiée et les statistiques associées."),
+        
+        html.Div(id='sidebar-info')
+    ], className='side_bar') 
