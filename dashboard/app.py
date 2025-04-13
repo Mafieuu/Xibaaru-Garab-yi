@@ -1,64 +1,87 @@
-# app.py
-from dash import Dash, html, dcc
+from dash import Dash, html
 import dash_bootstrap_components as dbc
-from components.siderbar import create_sidebar
-import data_loader as dl
-from components.selectors import create_analysis_selector, create_forest_selector, create_year_selectors
-from components.main_view_components import create_primary_chart_area, create_map_area
-from components.footer import create_footer
-from callbacks.main_callback import register_main_callback
-import plotly.graph_objects as go 
+import sys
+import os
+sys.path.append(os.path.dirname(__file__))
 
+import data_loader 
+
+from components.siderbar import create_sidebar
+from components.selectors import (create_analysis_selector, create_forest_selector,
+                                 create_year_slider, create_year_selectors,
+                                 create_view_type_selector, 
+                                 create_timeseries_filter)
+
+from components.charts import create_secondary_chart_area 
+from components.map_display import create_map_area
+from components.footer import create_footer 
+
+
+from callbacks.main_callback import register_main_callback
 
 try:
-    initial_forests, initial_years = dl.get_initial_data()
-    if not initial_forests: print("ERREUR critique: Aucune forêt trouvée.")
-    if not initial_years: print("AVERTISSEMENT: Aucune année trouvée.")
+    initial_forests, initial_years = data_loader.get_initial_data()
+    if not initial_forests: print(" Aucune forêt trouvée.")
+    if not initial_years: print(" Aucune année trouvée.")
 except Exception as e:
-    print(f"ERREUR critique chargement initial: {e}")
+    print(f"ERREUR chargement initial: {e}")
     initial_forests, initial_years = [], []
 
-app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
-app.title = "Dashboard Suivi Forêts"
-app.config.suppress_callback_exceptions = True # Nécessaire car on cache/affiche des outputs
 
-initial_fig = go.Figure()
-initial_fig.update_layout(xaxis={"visible": False}, yaxis={"visible": False},
-                           annotations=[{"text": "Sélectionnez...", "xref": "paper", "yref": "paper", "showarrow": False}])
-
-app.layout = html.Div([
-    create_sidebar(), 
-
-    html.Div([ 
-        html.Div([
-            html.Div([ 
-                html.Label("Mode d'Analyse:", style={'margin-right': '10px'}),
-                create_analysis_selector()
-            ], style={'display': 'inline-block', 'margin-right': '30px'}),
-            html.Div([ 
-                 create_forest_selector(initial_forests)
-            ], style={'display': 'inline-block', 'margin-right': '30px'}),
-
-             html.Div([ 
-                 create_year_selectors(initial_years)
-             ], style={'display': 'inline-block'}),
-
-        ], className='box', style={'margin': '10px', 'padding': '15px'}), 
-
-        
-        html.Div([
-            create_primary_chart_area(), 
-            create_map_area(),           
-        ], className='row'), 
+app = Dash(__name__, external_stylesheets=[dbc.themes.PULSE]) # Thème Pulse
+app.title = "Dashboard Suivi Forêts classé du Sénégal"
+app.config.suppress_callback_exceptions = True
 
 
-        create_footer(),
+app.layout = dbc.Container(fluid=True, children=[
+    dbc.Row([
+        dbc.Col(create_sidebar(), width=12, lg=2, className="side_bar bg-light"), # Utilise classe CSS
 
-    ], className='main') 
+        dbc.Col([
+            # Ligne 1: Titre et Sélecteurs
+            dbc.Card(dbc.CardBody([
+                html.H4("Tableau de Bord de suivi de la déforestation - Sénégal", className="card-title text-center"),
+                dbc.Row([
+                    dbc.Col(create_analysis_selector(), width=12, md=6, lg=3),
+                    dbc.Col(create_forest_selector(initial_forests), width=12, md=6, lg=3),
+                    dbc.Col(create_view_type_selector(), width=12, md=6, lg=3),
+                    dbc.Col(create_year_selectors(initial_years), width=12, md=6, lg=3)
+                ], className="align-items-center"),
+                dbc.Row([
+                    dbc.Col(create_year_slider(initial_years), width=12, lg=12)
+                ], className="mt-3"),
+            ]), className="mb-4",
+    style={"background-color": "#f1faee"}),
+
+            # Ligne 2: Graphique Temporel / Affichage Raster/Stats/Infos
+            dbc.Row([
+                # Colonne Gauche: Graphique Temporel seulement
+                dbc.Col([
+                     dbc.Card(dbc.CardBody([
+                        html.Div(id='secondary-chart-wrapper', children=[
+                            create_secondary_chart_area(),
+                            create_timeseries_filter()
+                        ])
+                     ]), id='secondary-chart-container')
+                ], width=12, lg=4), # Largeur Colonne Gauche
+
+                # Colonne Droite: Affichage Raster, Stats Combinées, Infos Tertiaires
+                dbc.Col(
+                    # create_map_area retourne  la structure dbc.Col  pour cette zone
+                    create_map_area(),
+                    width=12, lg=8 
+                ),
+            ]),
+                        # Ajout du pied de page
+            create_footer()
+
+        ], width=12, lg=10, style={'padding': '25px'})
+    ], style={'min-height': '100vh'})
 ])
+
 
 register_main_callback(app)
 
 
 if __name__ == '__main__':
-    app.run(debug=True) 
+    app.run(debug=True)

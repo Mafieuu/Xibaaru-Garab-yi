@@ -1,103 +1,182 @@
-body {
-  font-family: sans-serif;
-  margin: 0;
-  background-color: #f4f4f4; /* Couleur de fond  */
+/* assets/styles.css */
+
+/* --- Variables de Couleur --- */
+:root {
+  --primary-color: #206a5d;
+  --secondary-color: #81b29a;
+  --accent-color: #f2cc8f;
+  --light-bg: #f0f2f5;
+  --white-bg: #ffffff;
+  --sidebar-bg: #e8f0ee; /* NOUVEAU: Fond très léger pour sidebar */
+  --selectors-bg: #f8f9fa; /* NOUVEAU: Fond léger pour zone sélecteurs */
+  --dark-text: #343a40;
+  --medium-text: #6c757d;
+  --border-color: #dee2e6;
+  /* ... autres couleurs ... */
+  --shadow-color: rgba(0, 0, 0, 0.06); /* Ombre encore plus légère */
 }
 
-/* Barre Latérale */
+/* --- Style Global --- */
+/* ... (inchangé) ... */
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: var(--light-bg); color: var(--dark-text); margin: 0; line-height: 1.6; }
+
+/* --- Layout Principal --- */
+#main-content-area {
+  background-color: var(--white-bg);
+  border-radius: 10px;
+  padding: 25px;
+  margin-top: 15px;
+  margin-right: 15px;
+  box-shadow: 0 2px 10px var(--shadow-color);
+}
+
+
+/* --- Sidebar --- */
 .side_bar {
-  width: 20%; 
+  background-color: var(--sidebar-bg); /* <-- CHANGEMENT COULEUR FOND */
+  padding: 30px 20px;
+  border-right: 1px solid var(--border-color);
+  /* height, position, top, overflow-y gérés par dbc.Col */
+  /* box-shadow retiré car fond coloré */
+}
+/* ... autres styles .side_bar (h2, p, hr, img, markdown) inchangés ... */
+.side_bar h2 {font-size: 1.2rem;  color: var(--primary-color); text-align: center; margin-bottom: 20px; font-weight: 400; letter-spacing: 0.5px; }
+.side_bar p { font-size: 0.9rem; color: var(--medium-text); margin-bottom: 18px; text-align: justify; }
+.side_bar hr { border-top: 1px solid var(--border-color); margin-top: 25px; margin-bottom: 25px; }
+.side_bar img { border-radius: 6px; box-shadow: 0 2px 4px var(--shadow-color); }
+.side_bar #sidebar-info-text .markdown p, .side_bar #sidebar-info-text .markdown li { color: var(--dark-text); font-size: 0.88rem; margin-bottom: 8px; }
+.side_bar #sidebar-info-text .markdown strong { color: var(--primary-color); }
+
+
+/* --- Cartes (Cards) --- */
+.card { border: 1px solid var(--border-color); box-shadow: none; margin-bottom: 25px; border-radius: 8px; background-color: var(--white-bg); }
+.card-body { padding: 20px; }
+.card-title { color: var(--primary-color); margin-bottom: 15px; font-weight: 600; border-bottom: 1px solid #e9ecef; padding-bottom: 10px; }
+
+/* --- NOUVEAU: Style pour la zone des sélecteurs --- */
+.selectors-card { /* Cible la Card entière */
+ background-color: var(--selectors-bg); /* Utilise la couleur définie */
+ border-color: #d8dde2; /* Bordure légèrement plus visible */
+}
+.selectors-card .card-body {
+  padding-top: 15px;
+  padding-bottom: 5px; /* Moins de padding en bas si slider suit */
+}
+.selectors-card .card-title {
+  font-size: 1.1rem; /* Titre un peu plus petit */
+  border-bottom: none; /* Pas de ligne sous le titre ici */
+  margin-bottom: 10px;
+}
+/* --- Fin Style Sélecteurs --- */
+
+
+/* --- Sélecteurs (Dropdowns, Radio, Slider) --- */
+/* ... styles inchangés ... */
+.Select-control, .Select--single > .Select-control .Select-value, .Select-placeholder { border-radius: 5px !important; border-color: #ced4da; }
+.Select--multi .Select-value { border-radius: 3px !important; }
+.radio .form-check { margin-right: 20px; padding-left: 0; }
+.radio .form-check-input { margin-right: 8px; }
+.radio .form-check-label { font-weight: 500; color: var(--dark-text); }
+.rc-slider { margin-top: 15px; margin-bottom: 35px; }
+.rc-slider-track { background-color: var(--secondary-color); }
+.rc-slider-handle { border-color: var(--primary-color); background-color: var(--primary-color); box-shadow: 0 0 5px var(--primary-color); }
+.rc-slider-mark-text { font-size: 0.8rem; }
+
+
+/* --- Tableaux --- */
+/* ... styles inchangés ... */
+.table { margin-bottom: 0; }
+.table-sm { font-size: 0.88rem; }
+.table thead th { background-color: var(--primary-color); color: var(--white-bg); border-bottom: none; font-weight: 600; padding: 0.8rem 0.6rem; text-align: center; vertical-align: middle; }
+.table thead th:first-child { border-top-left-radius: 5px; } .table thead th:last-child { border-top-right-radius: 5px; }
+.table tbody td { padding: 0.6rem 0.6rem; vertical-align: middle; border-color: #f1f1f1; }
+.table-hover tbody tr:hover { background-color: #eaf3f1; color: #000; }
+.table td:not(:first-child), .table th:not(:first-child) { text-align: center; }
+.table td:first-child, .table th:first-child { text-align: left; }
+#combined-stats-chart-display > div > div:last-child { background-color: #fdfdfe; padding: 15px; border: 1px solid #f0f0f0; border-radius: 5px; margin-top: 15px; }
+
+
+/* --- Graphiques Plotly (Conteneurs) --- */
+/* ... styles inchangés ... */
+.js-plotly-plot .plotly, .js-plotly-plot .plotly svg { border-radius: 5px; }
+#raster-display-graph { border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; }
+#secondary-chart-container .card-body { overflow-x: hidden; }
+
+
+/* --- Titres spécifiques (hors graphiques) --- */
+#map-title { font-size: 1.3rem; color: var(--dark-text); font-weight: 600; margin-bottom: 15px; text-align: center; }
+h5 { color: var(--primary-color); font-weight: 600; margin-bottom: 15px; padding-bottom: 5px; border-bottom: 1px dashed var(--secondary-color); }
+
+/* --- Zone Tertiaire / Résumé Comparaison --- */
+/* ... styles inchangés ... */
+#tertiary-content .list-group-item { font-size: 0.9rem; font-weight: 500; border-radius: 4px; margin-bottom: 5px; border: none; padding: 10px 15px; }
+#tertiary-content .list-group-item-success { background-color: #d1e7dd; color: #0a3622; border-left: 5px solid #198754; }
+#tertiary-content .list-group-item-danger { background-color: #f8d7da; color: #58151c; border-left: 5px solid #dc3545; }
+#tertiary-content .list-group-item-secondary { background-color: #e9ecef; color: #495057; border-left: 5px solid #adb5bd; }
+#tertiary-content ul { list-style: none; padding-left: 5px; }
+#tertiary-content ul li { margin-bottom: 6px; font-size: 0.88rem; }
+#tertiary-content p { font-style: italic; color: var(--medium-text); font-size: 0.9rem; margin-top: 10px; }
+
+
+/* --- Utilitaires --- */
+.text-center { text-align: center; }
+.fw-bold { font-weight: bold; }
+.fst-italic { font-style: italic; }
+
+/* Styles du bloc Analyse */
+.analysis-selector-container {
+  background-color: white; /* Fond blanc */
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Ombre pour séparer */
+  display: flex;
+  flex-wrap: wrap; /* Permet un bon ajustement des éléments */
+  justify-content: center;
+  align-items: center;
+}
+
+.radio-group .btn {
+  width: auto; /* Ajustement automatique */
+  white-space: nowrap; /* Empêcher le retour à la ligne */
+  padding: 8px 12px;
+}
+.radio-group .btn:hover, .radio-group .btn:active, .radio-group .btn:focus {
+  background-color: #007bff;
+  color: white;
+  border-color: #0056b3;
+}
+
+/* Alignement des sélecteurs */
+.selector-card-body {
+  background-color: #f1faee; /* Fond uniforme */
   padding: 20px;
-  background-color: #fee6e6; /* Couleur de fond sidebar */
-  float: left; 
-  height: 100vh; /* Pleine hauteur */
-  box-sizing: border-box;
-  overflow-y: auto; /* Scroll si contenu dépasse */
+  border-radius: 10px;
 }
-.side_bar h2 {
-  color: #333;
-}
-.side_bar hr {
-   border-top: 1px solid #ccc;
+/* Style pour le sélecteur de forêt */
+#forest-selector .Select-control {
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  background-color: white;
 }
 
-
-/* Contenu Principal  */
-.main {
-  width: 80%; /* Le reste de la largeur */
-  float: left; /* Positionnement */
-  padding: 20px;
-  box-sizing: border-box;
+#forest-selector .Select-value {
+  color: var(--dark-text);
+  padding: 8px 12px;
 }
 
-/* Ligne  */
-.row {
-  display: flex; 
-  justify-content: space-between; /* Espacer les éléments */
-  margin-bottom: 20px; /* Marge entre les lignes */
-}
-.row > div { /* Cibler les Divs directes dans une row */
-   box-sizing: border-box;
+#forest-selector .Select-arrow-zone {
+  color: var(--primary-color);
 }
 
-
-/* Boîte générique */
-.box {
-  background-color: #ffffff;
-  border: 1px solid #f62424; 
-  border-radius: 5px; /* Coins arrondis */
-  padding: 15px; /* Espacement intérieur */
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
-  box-sizing: border-box;
-}
-.box label {
-  font-weight: bold;
-  color: #555;
-  margin-bottom: 8px; /* Espace sous les labels */
-  display: block; /* Pour que la marge fonctionne bien */
+#forest-selector .Select-menu-outer {
+  border-radius: 0 0 5px 5px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 5px var(--shadow-color);
 }
 
-/* Commentaire sous graphique */
-.box_comment {
-  margin-top: 10px;
-  padding: 10px;
-  background-color: #f8f9fa; 
-  border-radius: 3px;
-  font-size: 0.9em;
-  color: #495057;
-}
-
-/* Style pour les RadioItems */
-.radio .form-check { /* Cible les éléments générés par dbc.RadioItems */
-  display: inline-block; /* Affichage horizontal */
-  margin-right: 15px; /* Espacement entre les options */
-}
-.radio .form-check-label {
-   font-weight: normal !important; /* Rendre le label moins gras que les labels de boîte */
-   padding-left: 5px;
-}
-.radio .form-check-input {
-   margin-top: 0.2rem; 
-}
-
-/* Ajustements pour les Dropdowns pour les rendre plus compacts */
-.Select--single > .Select-control {
-  height: 34px; /* Hauteur plus petite */
-  min-height: 34px;
-}
-.Select-placeholder, .Select--single > .Select-control .Select-value {
-   line-height: 32px !important; /* Centrer le texte verticalement */
-}
-.Select-input > input {
-   padding: 5px 0 !important; /* Ajuster padding input */
-   line-height: 22px !important;
-}
-
-/* Style pour les tables générées par dash-bootstrap-components */
-.table {
-  font-size: 0.9em; /* Texte plus petit dans les tables */
-}
-.table th {
-   font-weight: bold;
-   background-color: #f8f9fa;
+/* Ajustement pour la zone de sélection sur mobile */
+@media (max-width: 576px) {
+  #forest-selector {
+      width: 100%;
+  }
 }

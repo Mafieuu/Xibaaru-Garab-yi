@@ -12,4 +12,5 @@ venv_env/
 **/.vscode/
 *.csv
 *.tif
+*.geojson
 dashboard/data/Data_hackathon_stat-20250412T210230Z-001/

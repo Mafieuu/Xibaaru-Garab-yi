@@ -1,7 +1,9 @@
 from dash.dependencies import Input, Output, State
 import plotly.graph_objects as go
 import numpy as np
-
+#
+# abandonner, mais peut toujours servir .....
+#
 def map_callback(app, data_dict):
     @app.callback(
         [
