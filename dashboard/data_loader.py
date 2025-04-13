@@ -170,3 +170,41 @@ def get_initial_data():
      forests = get_forest_names()
      initial_years = get_available_years(forests[0]) if forests else get_available_years()
      return forests, initial_years
+
+
+def calculate_stats_difference(stats_df_new, stats_df_old, year_new, year_old):
+    """ Calcule la différence de surface et de pourcentage entre deux DataFrames de statistiques. """
+    if stats_df_new.empty or stats_df_old.empty:
+        return pd.DataFrame()
+
+    # Fusionner les dataframes sur l'index ou le label de classe
+    merged_stats = pd.merge(
+        stats_df_new[['Classe Index', 'Classe Label', 'Surface (ha)', '% Couverture']],
+        stats_df_old[['Classe Index', 'Surface (ha)', '% Couverture']],
+        on='Classe Index',
+        suffixes=(f'_{year_new}', f'_{year_old}'),
+        how='outer' # Garder toutes les classes même si elles n'existent que dans 
+    ).fillna(0) # Remplacer NaN par 0 si une classe manque une année
+
+    # Calculer les différences
+    merged_stats[f'Différence Surface (ha)'] = merged_stats[f'Surface (ha)_{year_new}'] - merged_stats[f'Surface (ha)_{year_old}']
+    merged_stats[f'Différence % Couverture'] = merged_stats[f'% Couverture_{year_new}'] - merged_stats[f'% Couverture_{year_old}']
+
+    # Sélectionner et renommer les colonnes pertinentes pour l'affichage
+    diff_df = merged_stats[[
+        'Classe Label',
+        f'Surface (ha)_{year_new}',
+        f'Surface (ha)_{year_old}',
+        f'Différence Surface (ha)',
+        f'Différence % Couverture'
+    ]].round(2) 
+
+    return diff_df
+
+def calculate_diff_map(map_new, map_old):
+     """ Calcule une carte de différence simple (pixel par pixel). Peut être bruité. """
+     if map_new is None or map_old is None or map_new.shape != map_old.shape:
+         return None
+     # Simple différence, les valeurs peuvent être négatives, positives ou nulles
+     diff_map = map_new.astype(np.int8) - map_old.astype(np.int8)
+     return diff_map

@@ -1,143 +1,103 @@
 body {
-  background-color:#EDEFEB;
-  font-family: "Open Sans", verdana, arial, sans-serif;
+  font-family: sans-serif;
+  margin: 0;
+  background-color: #f4f4f4; /* Couleur de fond  */
 }
 
+/* Barre Latérale */
 .side_bar {
-  height: 100%;
-  width: 14%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background-color: #4B9072;
-  padding-left: 1%;
-  padding-right: 1%;
-  color:rgb(7, 7, 7);
+  width: 20%; 
+  padding: 20px;
+  background-color: #fee6e6; /* Couleur de fond sidebar */
+  float: left; 
+  height: 100vh; /* Pleine hauteur */
+  box-sizing: border-box;
+  overflow-y: auto; /* Scroll si contenu dépasse */
+}
+.side_bar h2 {
+  color: #333;
+}
+.side_bar hr {
+   border-top: 1px solid #ccc;
 }
 
+
+/* Contenu Principal  */
 .main {
-  font-size: 15px; 
-  padding: 0px 10px;
-  padding-left: 16%;
-  color:#363535;
+  width: 80%; /* Le reste de la largeur */
+  float: left; /* Positionnement */
+  padding: 20px;
+  box-sizing: border-box;
 }
 
-.footer {
-  position: relative;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  background-color: #4b9072a7;
-  padding-left: 1%;
+/* Ligne  */
+.row {
+  display: flex; 
+  justify-content: space-between; /* Espacer les éléments */
+  margin-bottom: 20px; /* Marge entre les lignes */
+}
+.row > div { /* Cibler les Divs directes dans une row */
+   box-sizing: border-box;
 }
 
-h1 {
-  color:#EDEFEB;
-  font-family: ui-monospace;
-}
 
-h3 {
-  margin-block-start:0.3em;
-  font-size: smaller;
-}
-
-h4 {
-  margin-block-end:0.3em;
-  font-size: smaller;
-}
-
-.text{
-  margin: 10px;
-  padding: 25px;
-  align-self: center;
-}
-
-.row{
-  display: flex;
-}
-
-/* Boxes */
-
+/* Boîte générique */
 .box {
-  border-radius: 20px;
-  background-color: #F9F9F8;
-  margin: 10px;
-  padding: 25px;
-  box-shadow: 2px 2px 2px lightgrey;
+  background-color: #ffffff;
+  border: 1px solid #f62424; 
+  border-radius: 5px; /* Coins arrondis */
+  padding: 15px; /* Espacement intérieur */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+  box-sizing: border-box;
+}
+.box label {
+  font-weight: bold;
+  color: #555;
+  margin-bottom: 8px; /* Espace sous les labels */
+  display: block; /* Pour que la marge fonctionne bien */
 }
 
+/* Commentaire sous graphique */
 .box_comment {
-  border-radius: 20px;
-  background-color: #d4f5c29a;
-  margin: 10px;
+  margin-top: 10px;
   padding: 10px;
-  box-shadow: 2px 2px 2px lightgrey;
-  font-size: small;
-  text-align: center;
-  font-family: system-ui;
+  background-color: #f8f9fa; 
+  border-radius: 3px;
+  font-size: 0.9em;
+  color: #495057;
 }
 
-.box_emissions{
-  border-radius: 20px;
-  background-color: #e9a8538e;    
-  margin: 2px;
-  box-shadow: 2px 2px 2px lightgrey;
-  justify-content: center;
-  width: 50%;
-  text-align: center;
+/* Style pour les RadioItems */
+.radio .form-check { /* Cible les éléments générés par dbc.RadioItems */
+  display: inline-block; /* Affichage horizontal */
+  margin-right: 15px; /* Espacement entre les options */
 }
-/* Drop down */
-#drop_map .VirtualizedSelectFocusedOption {
-  background-color:#ebb36abf;
+.radio .form-check-label {
+   font-weight: normal !important; /* Rendre le label moins gras que les labels de boîte */
+   padding-left: 5px;
 }
-
-#drop_continent .VirtualizedSelectFocusedOption {
-  background-color:#ebb36abf;
+.radio .form-check-input {
+   margin-top: 0.2rem; 
 }
 
-/* Radio buttons */
-.radio {
-  display:flex;
-  justify-content: left;
-  place-content:space-around;
-  width: 88%;
+/* Ajustements pour les Dropdowns pour les rendre plus compacts */
+.Select--single > .Select-control {
+  height: 34px; /* Hauteur plus petite */
+  min-height: 34px;
+}
+.Select-placeholder, .Select--single > .Select-control .Select-value {
+   line-height: 32px !important; /* Centrer le texte verticalement */
+}
+.Select-input > input {
+   padding: 5px 0 !important; /* Ajuster padding input */
+   line-height: 22px !important;
 }
 
-.radio input[type="radio"] {
-  opacity: 0;
-  position: absolute;
+/* Style pour les tables générées par dash-bootstrap-components */
+.table {
+  font-size: 0.9em; /* Texte plus petit dans les tables */
 }
-
-.radio label {
-  display: table-caption;
-  background-color: #F9F9F8;
-  padding: 15px 15px;
-  font-size: 16px;
-  border: 2px solid #e9a8538e;
-  border-radius: 10px;
-  width: 200%;
-  text-align: center;
-}
-
-.radio input[type="radio"]:checked + label {
-  background-color: #e98b1044;              
-  border: 2px solid #F9F9F8;
-}
-
-.radio label:hover {
-  background-color: #e1e2df;
-  border: 2px solid #e1e2df;
-}
-
-/* Scrollbars */
-*::-webkit-scrollbar {
-  width: 12px;               
-}
-*::-webkit-scrollbar-track {
-  background: #EDEFEB;        
-}
-*::-webkit-scrollbar-thumb {
-  background-color:#ebb36abf;    
-  border-radius: 20px;      
-  border: 3px solid #EDEFEB;  
+.table th {
+   font-weight: bold;
+   background-color: #f8f9fa;
 }
