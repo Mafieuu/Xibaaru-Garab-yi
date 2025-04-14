@@ -82,6 +82,6 @@ app.layout = dbc.Container(fluid=True, children=[
 
 register_main_callback(app)
 
-
+server = app.server
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=True)
