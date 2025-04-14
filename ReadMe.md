@@ -1,4 +1,7 @@
 # Dashboard de Suivi de la Déforestation au Sénégal
+ **Lien de l'application :** https://geoforestguardian-e50a48e16183.herokuapp.com/
+ Veillez utuliser ce lien avec modération,les données sont dans AWS et chaque requete est facturé.
+ Noter que parfois les serveurs de Heroku bloquent l'affichage des images, donc seul les captures d'écrans font office de rendue finale.
 
 ![Aperçu Principal](img/dashboard4.png) ## Introduction
 
