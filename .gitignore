@@ -15,3 +15,4 @@ venv_env/
 *.geojson
 dashboard/data/Data_hackathon_stat-20250412T210230Z-001/
 *.env
+notebooks/test_dir/92cb4ae4c4357dc0fc3bdbf705951a25/
